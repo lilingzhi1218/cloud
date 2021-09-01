@@ -1,0 +1,13 @@
+server:
+  port: 8881
+  servlet:
+    #����Ӧ�������ڶ���web����������ʱ����Ҫ���ã��������Eureka��ע�᲻�ɹ���Ϊ�˱��ֵ���һ�£�����jar����ʱҲ���ã�
+    context-path:
+spring:
+  application:
+    name: biz-1
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8880/eureka
+

@@ -1,0 +1,33 @@
+server:
+  port: 8883
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          #�Զ�ӳ��eureka�µķ���·��
+          enabled: true
+          #��������Сд
+          lower-case-service-id: true
+      #�����۶ϣ�����
+      default-filters:
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/fallback
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8880/eureka
+
+
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
