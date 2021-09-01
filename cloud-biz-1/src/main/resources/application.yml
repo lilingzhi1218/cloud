@@ -1,7 +1,6 @@
 server:
   port: 8881
   servlet:
-    #服务应用名（在独立web容器中运行时，需要设置，否则会在Eureka上注册不成功。为了保持调用一致，独立jar运行时也配置）
     context-path:
 spring:
   application:

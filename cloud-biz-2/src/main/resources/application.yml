@@ -2,7 +2,7 @@ server:
   port: 8882
 spring:
   application:
-    name: biz-1
+    name: biz-2
 eureka:
   client:
     service-url:
