@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public final class CheckUtil {
     private static Pattern pattern = null;
-
+    //1
     public CheckUtil() {
     }
 
