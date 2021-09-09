@@ -42,7 +42,7 @@ public final class CheckUtil {
                 if (oVal == item) {
                     return true;
                 }
-            } while(oVal == null || !oVal.equals(item));
+            } while(oVal == null || !oVal.equals(item));   
 
             return true;
         }
