@@ -46,7 +46,7 @@ public final class CheckUtil {
 
             return true;
         }
-    }
+    } 
 
     public static boolean containsIgnoreCase(Enumeration<String> list, String item) {
         if (list == null) {
