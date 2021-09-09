@@ -15,7 +15,7 @@ public final class CheckUtil {
     //2
     public CheckUtil() {
     }
-
+    //gogo
     public static boolean isEmail(String sAddr) {
         if (sAddr != null) {
             if (pattern == null) {
