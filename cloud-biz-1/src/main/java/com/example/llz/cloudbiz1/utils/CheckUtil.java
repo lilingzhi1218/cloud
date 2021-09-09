@@ -45,7 +45,7 @@ public final class CheckUtil {
             } while(oVal == null || !oVal.equals(item));   
 
             return true;
-        }
+        }  
     } 
 
     public static boolean containsIgnoreCase(Enumeration<String> list, String item) {
