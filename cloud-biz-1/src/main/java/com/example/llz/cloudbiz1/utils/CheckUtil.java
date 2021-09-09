@@ -27,7 +27,7 @@ public final class CheckUtil {
             return false;
         }
     }
-
+    //1-gogo
     public static <T> boolean contains(Enumeration<T> list, T item) {
         if (list == null) {
             return false;
