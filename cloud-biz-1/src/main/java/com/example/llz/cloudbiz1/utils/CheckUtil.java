@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public final class CheckUtil {
     private static Pattern pattern = null;
-    //1
+    //2
     public CheckUtil() {
     }
 
@@ -42,7 +42,7 @@ public final class CheckUtil {
                 if (oVal == item) {
                     return true;
                 }
-            } while(oVal == null || !oVal.equals(item));   
+            } while(oVal == null || !oVal.equals(item));
 
             return true;
         }  
