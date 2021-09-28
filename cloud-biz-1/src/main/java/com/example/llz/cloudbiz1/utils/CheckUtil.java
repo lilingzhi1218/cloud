@@ -12,10 +12,8 @@ import java.util.regex.Pattern;
 
 public final class CheckUtil {
     private static Pattern pattern = null;
-    //2
     public CheckUtil() {
     }
-    //gogo
     public static boolean isEmail(String sAddr) {
         if (sAddr != null) {
             if (pattern == null) {

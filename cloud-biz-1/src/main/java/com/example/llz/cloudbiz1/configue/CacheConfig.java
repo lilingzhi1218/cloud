@@ -1,92 +1,97 @@
 package com.example.llz.cloudbiz1.configue;
 
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.DiskStoreConfiguration;
-import net.sf.ehcache.config.PersistenceConfiguration;
-import net.sf.ehcache.config.SizeOfPolicyConfiguration;
-import net.sf.ehcache.config.SizeOfPolicyConfiguration.MaxDepthExceededBehavior;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CachingConfigurer;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.interceptor.CacheErrorHandler;
-import org.springframework.cache.interceptor.CacheResolver;
-import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-@EnableCaching
-public class CacheConfig implements CachingConfigurer {
+@EnableCaching //开启注解
+public class CacheConfig extends CachingConfigurerSupport {
 
-    @Value("${spring.ehcache.diskpath:java.io.tmpdir/ibasecache}")
-    private String path;
-    private static final String CACHE_DEFAULT_NAME = "ibase2private";
-    @Value("${spring.ehcache.cachename:ibase2private}")
-    private String cacheName;
-    private static String stcCacheName = "";
-    public CacheConfig() {
-    }
-
-    public static String getCacheName() {
-        return stcCacheName;
-    }
-    @Bean(
-            destroyMethod = "shutdown"
-    )
-    public CacheManager ehCacheManager() {
-        stcCacheName = this.cacheName;
-        net.sf.ehcache.config.Configuration config = new net.sf.ehcache.config.Configuration();
-        DiskStoreConfiguration diskStoreConfiguration = new DiskStoreConfiguration();
-        diskStoreConfiguration.setPath(this.path);
-        config.diskStore(diskStoreConfiguration);
-        SizeOfPolicyConfiguration sizeOfPolicy = new SizeOfPolicyConfiguration();
-        sizeOfPolicy.maxDepth(500).maxDepthExceededBehavior(SizeOfPolicyConfiguration.MaxDepthExceededBehavior.ABORT);
-        config.sizeOfPolicy(sizeOfPolicy);
-        CacheConfiguration defaultCache = new CacheConfiguration();
-        defaultCache.setMaxEntriesLocalHeap(0L);
-        defaultCache.setMaxBytesLocalHeap(536870912L);
-        defaultCache.setEternal(false);
-        defaultCache.setTimeToIdleSeconds(30L);
-        defaultCache.setTimeToLiveSeconds(30L);
-        defaultCache.setMemoryStoreEvictionPolicy("LFU");
-        config.addDefaultCache(defaultCache);
-        CacheConfiguration iBase2PrivateCache = new CacheConfiguration(this.cacheName, 2000);
-        iBase2PrivateCache.setMaxEntriesLocalHeap(0L);
-        iBase2PrivateCache.setMaxBytesLocalHeap(536870912L);
-        iBase2PrivateCache.setMaxEntriesLocalDisk(0L);
-        iBase2PrivateCache.setEternal(false);
-        iBase2PrivateCache.setTimeToIdleSeconds(60L);
-        iBase2PrivateCache.setTimeToLiveSeconds(60L);
-        iBase2PrivateCache.setMemoryStoreEvictionPolicy("LFU");
-        iBase2PrivateCache.setTransactionalMode("off");
-        PersistenceConfiguration persistenceConfiguration = new PersistenceConfiguration();
-        persistenceConfiguration.setStrategy("localTempSwap");
-        iBase2PrivateCache.persistence(persistenceConfiguration);
-        config.addCache(iBase2PrivateCache);
-        return CacheManager.newInstance(config);
-    }
-
+    /**
+     * retemplate相关配置
+     * @param factory 
+     * @return
+     */
     @Bean
-    public org.springframework.cache.CacheManager cacheManager() {
-        return new EhCacheCacheManager(this.ehCacheManager());
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory){
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        //配置连接工厂
+        template.setConnectionFactory(factory);
+        
+        //使用Jackson2jacksonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
+        Jackson2JsonRedisSerializer jacksonSerial = new Jackson2JsonRedisSerializer(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        //指定要序列化的域，field，get，set，以及修饰符范围，any是都包括private和public
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        //指定要序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String，Integer等会抛出异常
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jacksonSerial.setObjectMapper(om);
+        
+        //值采用json序列化
+        template.setValueSerializer(jacksonSerial);
+        //使用StringRedisSerializer来反序列化redis的key值
+        template.setKeySerializer(new StringRedisSerializer());
+        
+        //设置hash key和value序列化和反序列话模式
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(jacksonSerial);
+        template.afterPropertiesSet();
+        
+        return template;
     }
 
-    @Override
-    public CacheResolver cacheResolver() {
-        return null;
+    /**
+     * 对hash类型的数据操作
+     */
+    @Bean
+    public HashOperations<String, String, Object> hashOperations(RedisTemplate<String, Object> redisTemplate){
+        return redisTemplate.opsForHash();
     }
 
-    @Override
-    public KeyGenerator keyGenerator() {
-        return new SimpleKeyGenerator();
+    /**
+     * 对redis字符串数据的操作
+     * @param redisTemplate
+     * @return
+     */
+    @Bean
+    public ValueOperations<String, Object> valueOperations(RedisTemplate<String,Object> redisTemplate){
+        return redisTemplate.opsForValue();
     }
 
+    /**
+     * 对链表类型数据的操作|
+     */
+    @Bean
+    public ListOperations<String, Object> listOperations (RedisTemplate<String, Object> template){
+        return template.opsForList();
+    }
 
-    @Override
-    public CacheErrorHandler errorHandler() {
-        return null;
+    /**
+     * 对无序集合类型的数据操作
+     */
+    @Bean
+    public SetOperations<String, Object> setOperations(RedisTemplate<String, Object> redisTemplate){
+        return redisTemplate.opsForSet();
+    }
+    /**
+     * 对无序集合类型的数据操作
+     */
+    @Bean
+    public ZSetOperations<String, Object> zSetOperations(RedisTemplate<String, Object> redisTemplate){
+        return redisTemplate.opsForZSet();
     }
 }
