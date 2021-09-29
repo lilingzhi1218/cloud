@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
