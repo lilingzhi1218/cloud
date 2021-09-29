@@ -12,10 +12,8 @@ import java.util.regex.Pattern;
 
 public final class CheckUtil {
     private static Pattern pattern = null;
-    //2
     public CheckUtil() {
     }
-
     public static boolean isEmail(String sAddr) {
         if (sAddr != null) {
             if (pattern == null) {
@@ -27,7 +25,7 @@ public final class CheckUtil {
             return false;
         }
     }
-
+    //1-gogo
     public static <T> boolean contains(Enumeration<T> list, T item) {
         if (list == null) {
             return false;
@@ -42,7 +40,7 @@ public final class CheckUtil {
                 if (oVal == item) {
                     return true;
                 }
-            } while(oVal == null || !oVal.equals(item));   
+            } while(oVal == null || !oVal.equals(item));
 
             return true;
         }  
