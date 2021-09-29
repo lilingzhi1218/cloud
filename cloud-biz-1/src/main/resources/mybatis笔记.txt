@@ -1,0 +1,41 @@
+一、集成mybatis+oracle所需依赖
+    <!-- mybatis -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.mybatis.spring.boot</groupId>
+        <artifactId>mybatis-spring-boot-starter</artifactId>
+        <version>2.1.3</version>
+    </dependency>
+    <!-- oracle插件 非开源-->
+    <dependency>
+        <groupId>com.oracle</groupId>
+        <artifactId>ojdbc7</artifactId>
+        <version>12.1.0.2</version>
+    </dependency>
+二、集成mybatis+oracle所需配置
+    river-class-name: oracle.jdbc.driver.OracleDriver
+        url: jdbc:oracle:thin:@//localhost:1521/orcl
+        username: C##CLOUD
+        password: Admin123
+    
+    mybatis:
+      #  config-location: classpath:mybatis/mybatis-config.xml
+      mapper-locations: classpath:mapper/*.xml、
+
+三、mapper.xml:
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.example.llz.cloudbiz1.dao.PersonDao">
+        <select id="findPersonByName" resultType="com.example.llz.cloudbiz1.entity.Person" parameterType="java.lang.String">
+            select * from person where name=#{name}
+        </select>
+        
+        <insert id="addPerson" parameterType="com.example.llz.cloudbiz1.entity.Person">
+            insert into person values (#{id}, #{name}, #{age}, #{sex})
+        </insert>
+    </mapper>
+
+
