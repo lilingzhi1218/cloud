@@ -1,6 +1,6 @@
 package com.example.llz.cloudbiz1.utils;
 
-import com.example.llz.cloudbiz1.entity.Status;
+import com.example.llz.cloudbiz1.pojo.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -8,7 +8,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
