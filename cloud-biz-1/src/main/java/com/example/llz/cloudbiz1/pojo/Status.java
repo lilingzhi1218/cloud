@@ -1,4 +1,4 @@
-package com.example.llz.cloudbiz1.entity;
+package com.example.llz.cloudbiz1.pojo;
 
 import java.util.concurrent.TimeUnit;
 
