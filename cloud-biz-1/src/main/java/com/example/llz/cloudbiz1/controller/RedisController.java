@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * redis测试控制类
+ */
 @Controller
 @RequestMapping("redis")
 public class RedisController {
