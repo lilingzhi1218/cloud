@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
@@ -15,13 +16,17 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.time.Duration;
 
 @Configuration
 @EnableCaching //开启注解
 public class CacheConfig extends CachingConfigurerSupport {
 
     /**
+     * 1、使用RedisTemplate整合redis的配置方法
      * retemplate相关配置
      * @param factory 
      * @return
@@ -93,5 +98,27 @@ public class CacheConfig extends CachingConfigurerSupport {
     @Bean
     public ZSetOperations<String, Object> zSetOperations(RedisTemplate<String, Object> redisTemplate){
         return redisTemplate.opsForZSet();
+    }
+
+
+    /**
+     * 2、使用@cacheable方式整合redis的配置方法
+     *  * 我们 redisUtils 序列化方式采用 json序列化
+     *  * @Cacheable 默认序列化方式为 二进制的
+     *  * 两个不能混用，为了解决这个问题，这里设置 @Cacheable 默认序列化方式为 json
+     * 设置 redis 数据默认过期时间
+     * 设置@cacheable 序列化方式 fastjson 
+     *
+     * @return
+     */
+    @Bean
+    public RedisCacheConfiguration redisCacheConfiguration() {
+
+        FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
+        configuration = configuration.serializeValuesWith(
+                RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer)//1、使用自定义序列化方式
+        ).entryTtl(Duration.ofDays(30));//2、设置数据默认过期时间
+        return configuration;
     }
 }

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository("redisService")
 public interface IRedisService {
-    boolean redisSet(String key, String value);
-    Object redisGet(String key);
-    boolean expire(String key);
+    boolean redisTemplateSet(String key, String value);
+    Object redisTemplateGet(String key);
+    boolean redisTemplateExpire(String key);
 
     @Cacheable(value = "person", key = "#key")
-    Object get(String key);
+    Object annotationGet(String key);
 
     @CacheEvict(value = "person", key = "#person")
-    void set(Person person);
+    void annotationSet(Person person);
 }

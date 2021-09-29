@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("person")
-public class PersonController {
+@RequestMapping("redis")
+public class RedisController {
 
     @Autowired
     IRedisService redisService;
@@ -26,33 +26,33 @@ public class PersonController {
         person.put("性别：", "男");
         return person;
     }
-    @RequestMapping("redisSet")
+    @RequestMapping("redisTemplateSet")
     @ResponseBody
-    public boolean redisSet(String key, String value){
-        return this.redisService.redisSet(key, value);
+    public boolean redisTemplateSet(String key, String value){
+        return this.redisService.redisTemplateSet(key, value);
     }
 
-    @RequestMapping("redisGet")
+    @RequestMapping("redisTemplateGet")
     @ResponseBody
-    public Object redisGet(String key){
-        return this.redisService.redisGet(key);
+    public Object redisTemplateGet(String key){
+        return this.redisService.redisTemplateGet(key);
 
     }
-    @RequestMapping("expire")
+    @RequestMapping("redisTemplateExpire")
     public boolean expire(String key){
-        return this.redisService.expire(key);
+        return this.redisService.redisTemplateExpire(key);
     }
 
-    @RequestMapping("get")
+    @RequestMapping("annotationGet")
     @ResponseBody
     public Object get(String key){
-        return this.redisService.get(key);
+        return this.redisService.annotationGet(key);
     }
 
-    @RequestMapping("set")
+    @RequestMapping("annotationSet")
     @ResponseBody
     public void set(@RequestBody Person person){
-        this.redisService.set(person);
+        this.redisService.annotationSet(person);
     }
 
 }
