@@ -68,12 +68,6 @@
 			<artifactId>ojdbc7</artifactId>
 			<version>12.1.0.2</version>
 		</dependency>
-		<!--Mybatis-Plus 注意版本-->
-		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
-			<version>3.4.1</version>
-		</dependency>
 		
 
 	</dependencies>
