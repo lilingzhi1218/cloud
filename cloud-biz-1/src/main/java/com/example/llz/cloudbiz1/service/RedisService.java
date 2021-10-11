@@ -84,7 +84,7 @@ public class RedisService implements IRedisService {
     
     @CacheEvict(value = "person", key = "#person.name")
     @Override
-    public void annotationSet(Person person){
+    public void annotationEvict(Person person){
         System.out.println(person);
     }
 
