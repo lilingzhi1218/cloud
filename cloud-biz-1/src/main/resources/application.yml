@@ -23,6 +23,14 @@ spring:
     username: C##CLOUD
     password: Admin123
     
+  #mongoDb
+  data:
+    mongodb:
+      enabled: true
+      host: 127.0.0.1
+      port: 27017
+      database: llz
+
 #mybatis配置
 mybatis:
   #mybatis配置文件路径
