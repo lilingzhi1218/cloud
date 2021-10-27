@@ -1,0 +1,228 @@
+1.String和StringBuffer主要区别是性能:String是不可变对象,每次对String类型进行操作都等同于产生了一个新的String对象,然后指向新的String对象.
+  所以尽量不要对String进行大量的拼接操作,否则会产生很多临时对象,导致GC开始工作,影响系统性能.
+2.StringBuffer是对象本身操作,而不是产生新的对象,因此在有大量拼接的情况下,我们建议使用StringBuffer(线程安全).
+3.StringBuffer和StringBuilder的实现原理一样,其父类都是AbstractStringBuilder.StringBuffer是线程安全的,
+  StringBuilder是JDK 1.5新增的,其功能和StringBuffer类似,但是非线程安全.因此,在没有多线程问题的前提下,使用StringBuilder会取得更好的性能.
+4.如何将byte转为String
+  可以使用String接收 byte[] 参数的构造器来进行转换,注意要使用的正确的编码,否则会使用平台默认编码.这个编码可能跟原来的编码相同.也可能不同.
+5.可以将int强转为byte类型么?会产生什么问题?
+  可以做强制转换,但是Java中int是32位的而byte是8 位的.如果强制转化int类型的高24位将会被丢弃,byte 类型的范围是从-128到128.
+6.a=a+b与a+=b有什么区别吗?
+  +=操作符会进行隐式自动类型转换,此处a+=b隐式的将加操作的结果类型强制转换为持有结果的类型,而a=a+b则不会自动进行类型转换.如：
+  byte a = 127;
+  byte b = 127;
+  b = a + b; // 报编译错误:cannot convert from int to byte
+  b += a; 
+  以下代码是否有错？
+  short s1= 1;
+  s1 = s1 + 1;
+  有错误.short类型在进行运算时会自动提升为int类型,也就是说s1+1的运算结果是int类型,而s1是short类型,此时编译器会报错.
+  以下代码是否有错？
+  short s1= 1;
+  s1 += 1;
+  +=操作符会对右边的表达式结果强转匹配左边的数据类型,所以没错
+7.了解泛型么?简述泛型的上界和下界?
+  有时候希望传入的类型有一个指定的范围，从而可以进行一些特定的操作,这时候就需要通配符了?在Java中常见的通配符主要有以下几种:
+  <?>: 无限制通配符
+  <? extends E>: extends 关键字声明了类型的上界,表示参数化的类型可能是所指定的类型,或者是此类型的子类
+  <? super E>: super关键字声明了类型的下界,表示参数化的类型可能是指定的类型,或者是此类型的父类
+  它们的目的都是为了使方法接口更为灵活,可以接受更为广泛的类型.
+  
+  < ? extends E>: 用于灵活读取，使得方法可以读取 E 或 E 的任意子类型的容器对象。
+  < ? super E>: 用于灵活写入或比较,使得对象可以写入父类型的容器,使得父类型的比较方法可以应用于子类对象。
+  用简单的一句话来概括就是为了获得最大限度的灵活性,要在表示生产者或者消费者的输入参数上使用通配符,
+  使用的规则就是:生产者有上限(读操作使用extends),消费者有下限(写操作使用super)
+8.垃圾回收
+  简单的解释一下垃圾回收?
+  JVM中垃圾回收机制最基本的做法是分代回收.内存中的区域被划分成不同的世代,对象根据其存活的时间被保存在对应世代的区域中.
+  一般的实现是划分成3个世代:年轻,年老和永久代.所有新生成的对象优先放在年轻代的(大对象可能被直接分配在老年代,作为一种分配担保机制),
+  年轻代按照统计规律被分为三个区:一个Eden区，两个 Survivor区.在年轻代中经历了N次垃圾回收后仍然存活的对象,就会被放到年老代中.
+  因此可以认为年老代中存放的都是一些生命周期较长的对象.
+  
+  方法区也被称为永久代,用于存储每一个java类的结构信息:比如运行时常量池,字段和方法数据,构造函数和普通方法的字节码内容以及类,实例,
+  接口初始化时需要使用到的特殊方法等数据,根据虚拟机实现不同,GC可以选择对方法区进行回收也可以不回收.
+  对于不同的世代可以使用不同的垃圾回收算法。比如对由于年轻代存放的对象多是朝生夕死,因此可以采用标记-复制,而对于老年代则可以采用标记-整理/清除.
+
+9.Minor GC
+  发生在新生代的GC为Minor GC.在Minor GC时会将新生代中还存活着的对象复制进一个Survivor中,然后对Eden和另一个Survivor进行清理.所以,平常可用的新生代大小为Eden的大小+一个Survivor的大小.
+  
+10.Major GC
+  在老年代中的GC则为Major GC.
+  
+11.Full GC
+  通常是和Major GC等价的,针对整个新生代,老年代,元空间metaspace(java8以上版本取代perm gen)的全局范围的GC.
+  
+  关于GC的类型,其实依赖于不同的垃圾回收器.可以具体查看相关垃圾回收器的实现.
+
+12.新生代进入老年代
+   分配担保机制:当Minor GC时,新生代存活的对象大于Survivor的大小时,这时一个Survivor装不下它们,那么它们就会进入老年代.
+   如果设置了-XX：PretenureSizeThreshold5M 那么大于5M的对象就会直接就进入老年代.
+   在新生代的每一次Minor GC 都会给在新生代中的对象+1岁,默认到15岁时就会从新生代进入老年代,可以通过-XX：MaxTenuringThreshold来设置这个临界点
+   常见的垃圾回收算法有哪些?简述其原理.
+   垃圾回收从理论上非常容易理解,具体的方法有以下几种:
+   标记-清除
+   标记-复制
+   标记-整理
+   分代回收
+13.如何判断一个对象是否应该被回收?
+   这就是所谓的对象存活性判断,常用的方法有两种:
+   （1）引用计数法
+   （2）对象可达性分析
+   由于引用计数法存在互相引用导致无法进行GC的问题,所以目前JVM虚拟机多使用对象可达性分析算法.
+14.哪些对象可以做GC Root?
+   JVM的标记算法我们可以了解为一个可达性算法，所以所有的可达性算法都会有起点，那么这个起点就是GC Root。
+   主要由以下四种:
+   JVM方法栈中引用的对象
+   本地方法栈中引用的对象
+   方法区常量引用的对象
+   方法区类属性引用的对象
+15.调用System.gc()会发生什么?
+   通知GC开始工作,但是GC真正开始的时间不确定.
+16.了解java当中的四种引用类型?他们之间的区别是什么?
+   在java中主要有以下四种引用类型:强引用,软引用,弱引用,虚引用.不同的引用类型主要体现在GC上:
+   （1）强引用:如果一个对象具有强引用,它就不会被垃圾回收器回收.即使当前内存空间不足,JVM也不会回收它.而是抛出 OutOfMemoryError 错误.
+       使程序异常终止.如果想中断强引用和某个对象之间的关联.可以显式地将引用赋值为null,这样一来的话.JVM在合适的时间就会回收该对象.
+   （2）软引用:在使用软引用时,如果内存的空间足够,软引用就能继续被使用而不会被垃圾回收器回收.只有在内存不足时,软引用才会被垃圾回收器回收.
+   （3）弱引用:具有弱引用的对象拥有的生命周期更短暂.因为当 JVM 进行垃圾回收,一旦发现弱引用对象,无论当前内存空间是否充足,都会将弱引用回收.
+       不过由于垃圾回收器是一个优先级较低的线程,所以并不一定能迅速发现弱引用对象.
+   （4）虚引用:如果一个对象仅持有虚引用,那么它相当于没有引用,在任何时候都可能被垃圾回收器回收.
+   
+17.spring的bean作用域都有哪些？默认是哪个？
+   作用域	字符	        描述
+   单例	    singleton	整个应用中只创建一个实例
+   原型	    prototype	每次注入时都新建一个实例
+   会话	    session	    为每个会话创建一个实例
+   请求	    request	    为每个请求创建一个实例
+   默认的是：单例 singleton
+18.创建单例的方式是否线程安全
+   （1）懒汉式（不安全写法）
+   public class Singleton{ 
+       private Singleton(){}
+       private static Singleton singleton = null；  //不建立对象
+       public static Singleton getInstance(){
+                if(singleton == null) {        //先判断是否为空
+                    singleton = new Singleton ();  //懒汉式做法 
+                }
+                return singleton;
+        }
+   }
+   （2）饿汉式
+      public class Singleton{ 
+          public Singleton(){}
+          private static Singleton singleton = new Singleton()；  //建立对象
+          public static Singleton getInstance(){
+            return singleton;//直接返回单例对象 
+          }
+      }
+    这两种创建方式中，懒汉式在多线程环境下就是线程不安全的，假设有线程1和线程2两个线程，线程1在判断if(singleton == null)的时候，突然失去cpu的执行权，
+    而线程2获得了cpu的执行权，执行了getInstance()方法，创建了个对象，但是这个事情线程1并不知道，线程1重新获得cpu的执行权时，判断f(singleton == null)结果是null，
+    所以又去创建了对象，那么这样就会出现破坏单例的情况，有多余的对象，所以线程是不安全的，解决方案之一就是加锁，代码如下
+   （3）懒汉式（安全写法）
+    public class Singleton{ 
+        private Singleton(){}
+        private static Singleton singleton = null；  //不建立对象
+        public static synchronized Singleton getInstance(){
+                 if(singleton == null) {        //先判断是否为空
+                     singleton = new Singleton ();  //懒汉式做法 
+                 }
+                 return singleton;
+         }
+    }
+    这种写法虽然保证了线程安全，但是后续线程每次在获取对象的时候不会进入if中，也就不会有线程安全问题，可这时候还是每次都进入同步块，影响性能，这是首应该采用双重监测机制
+    （3）懒汉式（优化安全写法）
+    public class Singleton{ 
+            private Singleton(){}
+            private static Singleton singleton = null；  //不建立对象
+            public static Singleton getInstance(){
+                 if(singleton == null) {        //先判断是否为空
+                     synchronized(Singleton.class){ //为空才进入同步代码块
+                        if(singleton == null){  //双重监测机制
+                            singleton = new Singleton ();  //懒汉式做法
+                        }
+                     }
+                 }
+                 return singleton;
+             }
+    还有一种可能就是虚拟机在创建一个对象的时候有三个步骤：（1）为对象分配内存空间（2）初始化对象（3）将变量指向刚刚分配的内存地址，但是这个执行顺序不是一成不变的，
+    若p1线程刚执行完（1）（3）步，线程p2就来判断singleton是否为null，结果为否，然后取到一个未初始化的对象。这时候有线程安全问题就来了。
+    用volatile来保证指令重排的问题，即把singleton这个变量声明为volatile。
+    （4）懒汉式（优化安全并避免指令重排的写法）
+    public class Singleton{ 
+        private Singleton(){}
+        private static volatile Singleton singleton = null；  //不建立对象
+        public static synchronized Singleton getInstance(){
+             if(singleton == null) {        //先判断是否为空
+                 singleton = new Singleton ();  //懒汉式做法 
+             }
+             return singleton;
+         }
+    }
+    
+    
+19.spring创建单例的方式？
+   Spring 对 Bean 实例的创建是采用单例注册表的方式进行实现的，而这个注册表的缓存是 ConcurrentHashMap 对象。
+    public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
+        // 通过 Map 实现单例注册表
+        private final Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>(64);
+        public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
+            Assert.notNull(beanName, "'beanName' must not be null");
+            synchronized (this.singletonObjects) {
+                // 检查缓存中是否存在实例  
+                Object singletonObject = this.singletonObjects.get(beanName);
+                if (singletonObject == null) {
+                    // ...忽略代码
+                    try {
+                        singletonObject = singletonFactory.getObject();
+                    }
+                    catch (BeanCreationException ex) {
+                        // ...忽略代码
+                    }
+                    finally {
+                        // ...忽略代码
+                    }
+                    // 如果实例对象在不存在，我们注册到单例注册表中。
+                    addSingleton(beanName, singletonObject);
+                }
+                return (singletonObject != NULL_OBJECT ? singletonObject : null);
+            }
+        }
+        protected void addSingleton(String beanName, Object singletonObject) {
+            synchronized (this.singletonObjects) {
+                this.singletonObjects.put(beanName, (singletonObject != null ? singletonObject : NULL_OBJECT));
+    
+            }
+        }
+    }
+*20.怎么判断使用已经创建好的单例对象是否线程安全？
+   （1）看这个单例里有没有全局变量（全局变量就是成员变量，成员变量又分实例变量和静态变量）
+   （2）如果有全局变量，看它是不是只可以读取而不能写入（有没有发布set方法）  
+   如果满足上面两个条件，那么这个单例就是不安全的。 
+21.spring的单例模式与线程安全
+   
+   （1）spring框架里的bean获取实例的时候都是默认单例模式，所以在多线程开发里就有可能会出现线程不安全的问题。当多个用户同时请求一个服务器时，
+     容器（tomcat）会给每一个请求分配一个线程，这时多个线程会并发执行该请求所对应的业务逻辑（controller里的方法），此时就要注意啦，
+     如果controller（是单例对象）里有全局变量并且又是可以修改的，那么就需要考虑线程安全的问题。解决方案有很多，
+     比如设置@scope("prototype")为多例模式，为每个线程创建一个controller，还可以使用ThreadLocal。
+   
+   （2）其实spring的源码里比如RequestContextHolder、TransactionSynchronizationManager、LoxaleContextHolder等这些对象创建方式也是单例，
+     底层就是用ThreadLocal处理的。ThreadLocal基本实现思路是：它会为每个线程提供一个独立的变量副本，从而隔离了多个线程对数据的访问冲突，
+     因为每个线程都拥有自己的变量副本，从而也就没必要对该变量进行同步啦。
+
+自动配置
+AOP全局异常处理
+自定义注解
+java1.8新特性
+jvm 类加载、优化
+jpa
+线程
+redis
+数据库优化
+sql分页
+事务
+cookie和session（cookie如果被浏览器禁用了，可以加在url）
+
+来有的宝贝们可能之前没用过不放心，好，我现在可以告诉你们啊宝贝们，这个是没有任何副作用哈，成分都是选用的瓜果蔬菜，而且还是有中中国人人寿做担担保保的，
+宝贝们可以放心吃放心喝，不会让你啦啦啦，只会让你顺顺顺
+
+
+
