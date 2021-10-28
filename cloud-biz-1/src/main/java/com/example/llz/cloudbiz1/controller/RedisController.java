@@ -52,10 +52,10 @@ public class RedisController {
         return this.redisService.annotationGet(key);
     }
 
-    @RequestMapping("annotationSet")
+    @RequestMapping("annotationEvict")
     @ResponseBody
     public void set(@RequestBody Person person){
-        this.redisService.annotationSet(person);
+        this.redisService.annotationEvict(person);
     }
 
 }

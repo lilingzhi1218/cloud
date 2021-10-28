@@ -1,0 +1,70 @@
+前言
+《用JPA还是MyBatis》
+他前身好像是ibatis,但是具体就不太了解了。使用上来讲，在那个boot还没有发布的年代，mybatis也曾经是每个程序员必备的基本技能。刚接触的时候mapper映射在我眼中简直是神奇。
+也算是用了半年多，多少有一定的了解。在这里基本的使用就不多介绍了，反正我一直所应用的也基本都是crud。没到多高深的地步。只能说对于多表查询确实是比较支持。
+尤其是在业务逻辑多是多表关联的情况下，mybatis绝对比jpa要更加适合。无论是以后的维护还是业务的变更都方便不少。
+
+我举个例子：现在业务上A,B,C,D四个表。如果你每个表都会在业务中用到，都需要有单独的增删改查，虽然有一定的关联关系，但是这种情况用jpa就比较合适。
+ABCD四个java实体不说，每个实体要对应一个repository。然后再repository层进行crud的编写。
+但是如果业务上A,B,C,D四个表是关联关系，你几乎不会单独对A,B,C进行操作，而且展现出来的也是D，那么这个时候jpa的使用就会很麻烦，因为你还是要四个实体四个repository。
+在一个接口中四个repository挨个调用一次。虽然也能完成业务逻辑，但是复杂又麻烦。还要考虑原子性什么的。
+所以这个时候用mybatis比较合适了。
+
+然后还有一些额外的东西。比如说spring家族的态度。我不知道各位有没有跟我一样的大众心理。一个jar包。只要是org.springframework.boot这个分组的，就比较信赖。
+毕竟有那么庞大的家族做后盾呢~~而且boot真的是封装的越来越具体了~~~反正依稀记得以前spring创建个项目，还要配置这个那个的，偶尔马虎下还报个错。
+一个结构要搭好一会儿的（也可能是我当时比较菜，但是确实要配置一些东西）而现在呢，spring boot，差不多创建了，依赖导一下就可以跑。真的是相当方便。
+哎~~spring boot用多了，都把人用成sb了~~~哈哈，开玩笑的，别当真。反正现在代码的高度封装让我们用什么都更加简单了。
+而boot对jpa的封装，反正我个人是觉得在单纯的配置上面，除了在配置文件中连接下数据库然后添加个data-jpa的依赖，搞定了。这也是个人比较喜欢jpa的一点。
+部署是真的简单。而且官方文档还很全面。也在持续维护更新。我觉得单纯从spring的角度，jpa就值得一试。当然了，这个属于个人心态，但是如果是新手在自己做练手项目的时候，我还是推荐jpa。
+
+作者：唯有努力不欺人丶
+链接：https://www.jianshu.com/p/32ce87c163d6
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+一、集成mybatis+oracle所需依赖
+    <!-- mybatis -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.mybatis.spring.boot</groupId>
+        <artifactId>mybatis-spring-boot-starter</artifactId>
+        <version>2.1.3</version>
+    </dependency>
+    <!-- oracle插件 非开源-->
+    <dependency>
+        <groupId>com.oracle</groupId>
+        <artifactId>ojdbc7</artifactId>
+        <version>12.1.0.2</version>
+    </dependency>
+二、集成mybatis+oracle所需配置
+    river-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@//localhost:1521/orcl
+    username: C##CLOUD
+    password: Admin123
+    
+    mybatis:
+      #  config-location: classpath:mybatis/mybatis-config.xml
+      mapper-locations: classpath:mapper/*.xml、
+
+三、
+1、mapper.xml(非注解方式)
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.example.llz.cloudbiz1.dao.PersonDao">
+        <select id="findPersonByName" resultType="com.example.llz.cloudbiz1.entity.Person" parameterType="java.lang.String">
+            select * from person where name=#{name}
+        </select>
+        
+        <insert id="addPerson" parameterType="com.example.llz.cloudbiz1.entity.Person">
+            insert into person values (#{id}, #{name}, #{age}, #{sex})
+        </insert>
+    </mapper>
+    
+2、注解方式
+    @Select("select * from person")
+    List<Person> findAllPerson();
+
+

@@ -6,6 +6,8 @@ import com.example.llz.cloudbiz1.iService.IMybatisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MybatisService implements IMybatisService {
     @Autowired
@@ -21,4 +23,8 @@ public class MybatisService implements IMybatisService {
         return personDao.addPerson(person);
     }
 
+    @Override
+    public List<Person> findAllPerson(){
+        return personDao.findAllPerson();
+    }
 }

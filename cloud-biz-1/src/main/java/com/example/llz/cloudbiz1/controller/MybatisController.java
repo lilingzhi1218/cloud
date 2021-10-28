@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("mybatis")
 public class MybatisController {
@@ -24,5 +26,11 @@ public class MybatisController {
     @ResponseBody
     public Integer addPerson(@RequestBody Person person){
         return mybatisService.addPerson(person);
+    }
+
+    @RequestMapping("findAllPerson")
+    @ResponseBody
+    public List<Person> findAllPerson(){
+        return mybatisService.findAllPerson();
     }
 }
