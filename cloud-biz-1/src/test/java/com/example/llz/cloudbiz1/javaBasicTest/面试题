@@ -207,9 +207,99 @@
    （2）其实spring的源码里比如RequestContextHolder、TransactionSynchronizationManager、LoxaleContextHolder等这些对象创建方式也是单例，
      底层就是用ThreadLocal处理的。ThreadLocal基本实现思路是：它会为每个线程提供一个独立的变量副本，从而隔离了多个线程对数据的访问冲突，
      因为每个线程都拥有自己的变量副本，从而也就没必要对该变量进行同步啦。
+22.spring单例模式和多例模式的用途
+    之所以用单例，是因为没必要每个请求都新建一个对象，这样子既浪费CPU又浪费内存；
+    之所以用多例，是为了防止并发问题；即一个请求改变了对象的状态，此时对象又处理另一个请求，而之前请求对对象状态的改变导致了对象对另一个请求做了错误的处理；
+    
+    可以全部用单例，也可以全部用非单例；
+    单例：节约对象创建的时间和垃圾回收时间，但是可能面临并发的危险；
+    所以大部分情况都是使用单例，只要注意在使用单例的时候可能造成的并发就可以了；
+    对象属性最好是不能更改的，或者控制其更改；
+    从性能上考虑的话，使用单例的配置很不错，毕竟spring默认就是使用单例，
+    当然你如果已经出现了并发的问题了，就需要使用prototype了，然后再考虑怎么解决单例产生的问题；
 
-自动配置
+23.自动配置
+   SpringBoot的核心就是自动配置，自动配置又是基于条件判断来配置Bean。
+24.SpringBoot运行原理
+   (1.三个重要的注解
+    我们可以发现，在使用main()启动SpringBoot的时候，只有一个注解@SpringBootApplication
+    我们可以点击进去@SpringBootApplication注解中看看，可以发现有三个注解是比较重要的：
+    @SpringBootConfiguration：我们点进去以后可以发现底层是Configuration注解，说白了就是支持JavaConfig的方式来进行配置(使用Configuration配置类等同于XML文件)。
+    @EnableAutoConfiguration：开启自动配置功能(后文详解)
+    @ComponentScan：这个注解，学过Spring的同学应该对它不会陌生，就是扫描注解，默认是扫描当前类下的package。将@Controller/@Service/@Component/@Repository等注解加载到IOC容器中。    
+   (2.重点EnableAutoConfiguration
+    我们知道SpringBoot可以帮我们减少很多的配置，也肯定听过“约定大于配置”这么一句话，那SpringBoot是怎么做的呢？其实靠的就是@EnableAutoConfiguration注解。
+    简单来说，这个注解可以帮助我们自动载入应用程序所需要的所有默认配置。
+    我们点进去看一下，发现有两个比较重要的注解：
+    @AutoConfigurationPackage：自动配置包
+    @Import：给IOC容器导入组件
+        (2.1.AutoConfigurationPackage
+             @AutoConfigurationPackage自动配置包，我们也看看@AutoConfigurationPackage里边有什么
+                 @Target(ElementType.TYPE)
+                 @Retention(RetentionPolicy.RUNTIME)
+                 @Documented
+                 @Inherited
+                 @Import(AutoConfigurationPackages.Registrar.class)
+                 public @interface AutoConfigurationPackage {
+                 
+                 }
+             我们可以发现，依靠的还是@Import注解，再点进去查看，我们发现重要的就是以下的代码：
+                 @Override
+                 public void registerBeanDefinitions(AnnotationMetadata metadata,
+                         BeanDefinitionRegistry registry) {
+                     register(registry, new PackageImport(metadata).getPackageName());
+                 }
+             在默认的情况下就是将：主配置类(@SpringBootApplication)的所在包及其子包里边的组件扫描到Spring容器中。
+             看完这句话，会不会觉得，这不就是ComponentScan的功能吗？这俩不就重复了吗？
+             比如说，你用了Spring Data JPA，可能会在实体类上写@Entity注解。这个@Entity注解由@AutoConfigurationPackage扫描并加载，
+             而我们平时开发用的@Controller/@Service/@Component/@Repository这些注解是由ComponentScan来扫描并加载的。
+    (3总结
+    @SpringBootApplication等同于下面三个注解：
+    
+    @SpringBootConfiguration
+    @EnableAutoConfiguration
+    @ComponentScan
+    其中@EnableAutoConfiguration是关键(启用自动配置)，内部实际上就去加载META-INF/spring.factories文件的信息，
+    然后筛选出以EnableAutoConfiguration为key的数据，加载到IOC容器中，实现自动配置功能！
+    
+    spring 的优点？
+    1.降低了组件之间的耦合性 ，实现了软件各层之间的解耦 
+    2.可以使用容易提供的众多服务，如事务管理，消息服务等 
+    3.容器提供单例模式支持 
+    4.容器提供了AOP技术，利用它很容易实现如权限拦截，运行期监控等功能 
+    5.容器提供了众多的辅助类，能加快应用的开发 
+    6.spring对于主流的应用框架提供了集成支持，如hibernate，JPA，Struts等 
+    7.spring属于低侵入式设计，代码的污染极低 
+    8.独立于各种应用服务器 
+    9.spring的DI机制降低了业务对象替换的复杂性 
+    10.Spring的高度开放性，并不强制应用完全依赖于Spring，开发者可以自由选择spring的部分或全部 
+    
+    什么是DI机制？ 
+    依赖注入（Dependecy Injection）和控制反转（Inversion of Control）是同一个概念，具体的讲：当某个角色需要另外一个角色协助的时候，在传统的程序设计过程中，通常由调用者来创建被调用者的实例。
+    但在spring中创建被调用者的工作不再由调用者来完成，因此称为控制反转。创建被调用者的工作由spring来完成，然后注入调用者 因此也称为依赖注入。 
+    spring以动态灵活的方式来管理对象 ， 注入的两种方式，设置注入和构造注入。 
+    设置注入的优点：直观，自然 
+    构造注入的优点：可以在构造器中决定依赖关系的顺序。
+    
+    什么是AOP？ 
+    面向切面编程（AOP）完善spring的依赖注入（DI），面向切面编程在spring中主要表现为两个方面 
+    1.面向切面编程提供声明式事务管理 
+    2.spring支持用户自定义的切面 
+    
+    面向切面编程（aop）是对面向对象编程（oop）的补充， 
+    面向对象编程将程序分解成各个层次的对象，面向切面编程将程序运行过程分解成各个切面。 
+    AOP从程序运行角度考虑程序的结构，提取业务处理过程的切面，oop是静态的抽象，aop是动态的抽象， 
+    是对应用执行过程中的步骤进行抽象，，从而获得步骤之间的逻辑划分。 
+    
+    aop框架具有的两个特征： 
+    1.各个步骤之间的良好隔离性 
+    2.源代码无关性 
+     
+    Spring的事务管理机制实现的原理，就是通过这样一个动态代理对所有需要事务管理的Bean进行加载，并根据配置在invoke方法中对当前调用的 方法名进行判定，
+    并在method.invoke方法前后为其加上合适的事务管理代码，这样就实现了Spring式的事务管理。Spring中的AOP实 现更为复杂和灵活，不过基本原理是一致的。
+
 AOP全局异常处理
+  
 自定义注解
 java1.8新特性
 jvm 类加载、优化
@@ -220,9 +310,4 @@ redis
 sql分页
 事务
 cookie和session（cookie如果被浏览器禁用了，可以加在url）
-
-来有的宝贝们可能之前没用过不放心，好，我现在可以告诉你们啊宝贝们，这个是没有任何副作用哈，成分都是选用的瓜果蔬菜，而且还是有中中国人人寿做担担保保的，
-宝贝们可以放心吃放心喝，不会让你啦啦啦，只会让你顺顺顺
-
-
 
