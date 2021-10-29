@@ -298,9 +298,67 @@
     Spring的事务管理机制实现的原理，就是通过这样一个动态代理对所有需要事务管理的Bean进行加载，并根据配置在invoke方法中对当前调用的 方法名进行判定，
     并在method.invoke方法前后为其加上合适的事务管理代码，这样就实现了Spring式的事务管理。Spring中的AOP实 现更为复杂和灵活，不过基本原理是一致的。
 
-AOP全局异常处理
+25.AOP
+   AOP（Aspect-OrientedProgramming，面向方面编程），可以说是OOP（Object-Oriented Programing，面向对象编程）的补充和完善。
+   OOP引入封装、继承和多态性等概念来建立一种对象层次结构，用以模拟公共行为的一个集合
+   OOP允许你定义从上到下的关系，但并不适合定义从左到右的关系。例如日志功能。日志代码往往水平地散布在所有对象层次中，而与它所散布到的对象的核心功能毫无关系。
+   而AOP技术则恰恰相反，它利用一种称为“横切”的技术，剖解开封装的对象内部，并将那些影响了多个类的公共行为封装到一个可重用模块，
+   AOP把软件系统分为两个部分：核心关注点和横切关注点。业务处理的主要流程是核心关注点，与之关系不大的部分是横切关注点。
+   横切关注点的一个特点是，他们经常发生在核心关注点的多处，而各处都基本相似。比如权限认证、日志、事务处理。
+  (1.pom中引入SpringBoot的web模块和使用AOP相关的依赖：
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+  (2.不需要任何配置，AOP的默认配置属性中，spring.aop.auto属性默认是开启的，也就是说只要引入了AOP依赖后，默认已经增加了@EnableAspectJAutoProxy
+  (3.定义切面类，实现web层的日志切面要想把一个类变成切面类，需要两步，
+     ① 在类上使用 @Component 注解 把切面类加入到IOC容器中
+     ② 在类上使用 @Aspect 注解 使之成为切面类
+  (4.在切面类中定义@Before("execution(public * com.example.aop..*.*(..))")注解的方法作为切入点的前置操作
+  (5.在切面类中定义@AfterReturning("execution(public * com.example.aop..*.*(..))")注解的方法作为切入点的后置操作
+  (6.后置异常通知@AfterThrowing：在方法抛出异常退出时执行的通知。
+  (7.后置最终通知@After：当某连接点退出时执行的通知（不论是正常返回还是异常退出）。
+  (8.环绕通知@Around：包围一个连接点的通知，如方法调用等。这是最强大的一种通知类型。环绕通知可以在方法调用前后完成自定义的行为，
+     它也会选择是否继续执行连接点或者直接返回它自己的返回值或抛出异常来结束执行。环绕通知最强大，也最麻烦，是一个对方法的环绕，
+     具体方法会通过代理传递到切面中去，切面中可选择执行方法与否，执行几次方法等。环绕通知使用一个代理ProceedingJoinPoint类型的对象来管理目标对象，
+     所以此通知的第一个参数必须是ProceedingJoinPoint类型。在通知体内调用ProceedingJoinPoint的proceed()方法会导致后台的连接点方法执行。
+     proceed()方法也可能会被调用并且传入一个Object[]对象，该数组中的值将被作为方法执行时的入参。
   
-自定义注解
+26.自定义注解 (注解其实就是一种标记，可以在程序代码中的关键节点（类、方法、变量、参数、包）上打上这些标记，然后程序在编译时或运行时可以检测到这些标记从而执行一些特殊操作)
+  Annotation是Java5开始引入的新特征，中文名称叫注解，一般使用场景为：自定义注解+拦截器或者AOP，使用自定义注解来自己设计框架，使得代码看起来非常优雅。
+  注解是一种元数据形式。即注解是属于java的一种数据类型，和类、接口、数组、枚举类似。
+  注解用来修饰，类、方法、变量、参数、包。
+  注解不会对所修饰的代码产生直接的影响。
+  元注解的作用就是负责注解其他注解。Java5.0定义了4个标准的meta-annotation类型，它们被用来提供对其它 annotation类型作说明。Java5.0定义的元注解：
+　　　　1.@Target,说明了Annotation所修饰的对象范围
+        取值(ElementType)有：
+    　　　　1.CONSTRUCTOR:用于描述构造器
+    　　　　2.FIELD:用于描述域
+    　　　　3.LOCAL_VARIABLE:用于描述局部变量
+    　　　　4.METHOD:用于描述方法
+    　　　　5.PACKAGE:用于描述包
+    　　　　6.PARAMETER:用于描述参数
+    　　　　7.TYPE:用于描述类、接口(包括注解类型) 或enum声明
+　　　　2.@Retention,用于描述注解的生命周期（即：被描述的注解在什么范围内有效）
+    　　取值（RetentionPoicy）有：
+    　　　　1.SOURCE:在源文件中有效（即源文件保留）
+    　　　　2.CLASS:在class文件中有效（即class保留）
+    　　　　3.RUNTIME:在运行时有效（即运行时保留）
+    　　3.@Documented,用于描述其它类型的annotation应该被作为被标注的程序成员的公共API，因此可以被例如javadoc此类的工具文档化。Documented是一个标记注解，没有成员。
+    　　4.@Inherited,元注解是一个标记注解，阐述了某个被标注的类型是被继承的。如果一个使用了@Inherited修饰的annotation类型被用于一个class，则这个annotation将被用于该class的子类。
+    
+  使用@interface自定义注解时，自动继承了java.lang.annotation.Annotation接口，由编译程序自动完成其他细节。在定义注解时，不能继承其他的注解或接口。
+  @interface用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型（返回值类型只能是基本类型、Class、String、enum）。
+  可以通过default来声明参数的默认值。
+  定义注解格式：public @interface 注解名 {定义体}
+  注解参数的可支持数据类型：
+　　　　1.所有基本数据类型（int,float,boolean,byte,double,char,long,short)
+　　　　2.String类型
+　　　　3.Class类型
+　　　　4.enum类型
+　　　　5.Annotation类型
+　　　　6.以上所有类型的数组
+  
 java1.8新特性
 jvm 类加载、优化
 jpa

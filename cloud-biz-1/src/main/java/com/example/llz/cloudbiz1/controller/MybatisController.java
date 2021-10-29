@@ -1,5 +1,6 @@
 package com.example.llz.cloudbiz1.controller;
 
+import com.example.llz.cloudbiz1.Annotation.LogAspect;
 import com.example.llz.cloudbiz1.entity.Person;
 import com.example.llz.cloudbiz1.iService.IMybatisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 public class MybatisController {
     @Autowired
     IMybatisService mybatisService;
-    
+    @LogAspect
     @RequestMapping("findPersonByName")
     @ResponseBody
     public Person findPersonByName(String name){
@@ -28,6 +29,7 @@ public class MybatisController {
         return mybatisService.addPerson(person);
     }
 
+    @LogAspect
     @RequestMapping("findAllPerson")
     @ResponseBody
     public List<Person> findAllPerson(){
