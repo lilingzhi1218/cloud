@@ -502,7 +502,37 @@
         大多数程序员在使用临时变量的时候，都是让引用变量在退出活动域(scope)后，自动设置为null，暗示垃圾收集器来收集该对象，
         还必须注意该引用的对象是否被监听，如果有，则要去掉监听器，然后再赋空值。
 
-jpa
+29.jpa
+  JPA的全称是Java Persistence API，提供了一个规范，用于将数据通过Java对象持久化、读取和管理数据库中的关系表。
+  所以JPA本质上就是一种ORM规范，它的目标是实现ORM的天下归一
+  1、java数据库编程的进化史：
+    1）jdbc：
+    jdbc是jdk提供数据库操作最基础的api，它提供了一套操作数据库的标准规范，不同的数据库厂商通过自己的驱动jar来适配该规范。
+    Class.forName("com.mysql.cj.jdbc.Driver");
+    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test","root","123456");           
+    // 执行查询
+    Statement stmt = conn.createStatement();
+    String sql = "SELECT id, name, url FROM websites";
+    ResultSet rs = stmt.executeQuery(sql);
+    
+    2）hibernate、mybatis 等ORM框架：
+    Hibernate 可以认为是JPA规范的的一种实现，使用起来比较方便，但是不够灵活；
+    Mybatis是一个持久层的sql mapping框架。 mybatis的优势在于可以灵活的写SQL，自由度比较高
+    
+    3）spring data jpa：
+    spring data jpa不是像Hibernate那样对jpa的实现，而是对其更进一步做了封装，使用起来非常简单、灵活。
+    spring data jpa的目的就是不让程序员花太多时间在数据库层面的处理，所以要做的只是声明接口（类似于mybatis），
+    而且spring data jpa会帮你把常用的sql都拼写好（不像mybatis那样，还需要自己写sql或者mapper）。
+    基于spring data jpa编写持久层逻辑，一般分为如下几步：  
+    定义实体类，关联数据库中的表。
+    声明持久层（Dao层）接口，接口需要继承Repository。
+    接口中声明需要的方法，spring data jpa会自动给我们生成实现代码
+    Spring data jpa有以下几个常用的接口：
+        Repository：仅仅是一个标识，表明任何继承它的均为仓库接口类，方便Spring自动扫描识别， 一般不在程序中直接使用。
+        CrudRepository：继承Repository，实现了一组CRUD相关的方法，这个用的比较多，一般如果上层业务只需要基本的增删改查，继承这个接口就可以了。
+        JpaRepository：继承PagingAndSortingRepository，实现一组JPA规范相关的方法。这个也用的比较多，它和CrudRepository区别在于支持分页和排序。
+
+  
 线程
 redis
 数据库优化

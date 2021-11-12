@@ -2,7 +2,9 @@ package com.example.llz.cloudbiz1.service;
 
 import com.example.llz.cloudbiz1.dao.PersonDao;
 import com.example.llz.cloudbiz1.entity.Person;
+import com.example.llz.cloudbiz1.entity.RelPersonCity;
 import com.example.llz.cloudbiz1.iService.IMybatisService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +28,10 @@ public class MybatisService implements IMybatisService {
     @Override
     public List<Person> findAllPerson(){
         return personDao.findAllPerson();
+    }
+    
+    @Override
+    public RelPersonCity findCityRelById(String id){
+        return personDao.findRelPersonCityById(id);
     }
 }

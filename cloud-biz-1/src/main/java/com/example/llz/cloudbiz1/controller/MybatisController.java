@@ -2,6 +2,7 @@ package com.example.llz.cloudbiz1.controller;
 
 import com.example.llz.cloudbiz1.Annotation.LogAspect;
 import com.example.llz.cloudbiz1.entity.Person;
+import com.example.llz.cloudbiz1.entity.RelPersonCity;
 import com.example.llz.cloudbiz1.iService.IMybatisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,5 +35,11 @@ public class MybatisController {
     @ResponseBody
     public List<Person> findAllPerson(){
         return mybatisService.findAllPerson();
+    }
+    
+    @RequestMapping("findCityRelById")
+    @ResponseBody
+    public RelPersonCity findCityRelById(String id){
+        return mybatisService.findCityRelById(id);
     }
 }

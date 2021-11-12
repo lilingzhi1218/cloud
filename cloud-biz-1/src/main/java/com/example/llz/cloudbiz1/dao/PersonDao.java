@@ -1,6 +1,7 @@
 package com.example.llz.cloudbiz1.dao;
 
 import com.example.llz.cloudbiz1.entity.Person;
+import com.example.llz.cloudbiz1.entity.RelPersonCity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -26,4 +27,7 @@ public interface PersonDao {
             @Result(property = "sex", column = "id")
     })
     List<Person> findAllPerson();
+
+    @Select("select * from rel_person_city where rel_id = #{rel_id}")
+    RelPersonCity findRelPersonCityById(@Param("rel_id") String Id);
 }

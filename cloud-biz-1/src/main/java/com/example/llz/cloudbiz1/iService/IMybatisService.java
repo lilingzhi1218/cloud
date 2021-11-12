@@ -1,6 +1,7 @@
 package com.example.llz.cloudbiz1.iService;
 
 import com.example.llz.cloudbiz1.entity.Person;
+import com.example.llz.cloudbiz1.entity.RelPersonCity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface IMybatisService {
     Integer addPerson(Person person);
 
     List<Person> findAllPerson();
+
+    RelPersonCity findCityRelById(String id);
 }

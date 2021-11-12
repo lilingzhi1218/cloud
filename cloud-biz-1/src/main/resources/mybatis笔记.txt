@@ -53,7 +53,7 @@ ABCD四个java实体不说，每个实体要对应一个repository。然后再re
 1、mapper.xml(非注解方式)
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-    <mapper namespace="com.example.llz.cloudbiz1.dao.PersonDao">
+    <mapper namespace="com.example.llz.cloudbiz1.mapper.PersonDao">
         <select id="findPersonByName" resultType="com.example.llz.cloudbiz1.entity.Person" parameterType="java.lang.String">
             select * from person where name=#{name}
         </select>
