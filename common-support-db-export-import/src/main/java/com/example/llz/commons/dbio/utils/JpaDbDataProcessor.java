@@ -1,9 +1,9 @@
-package com.example.llz.commons.utils;
+package com.example.llz.commons.dbio.utils;
 
 
 
-import com.example.llz.commons.config.JpaDbDataUtilProperties;
-import com.example.llz.commons.support.DbDataProcessor;
+import com.example.llz.commons.dbio.config.JpaDbDataUtilProperties;
+import com.example.llz.commons.dbio.support.DbDataProcessor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Map;

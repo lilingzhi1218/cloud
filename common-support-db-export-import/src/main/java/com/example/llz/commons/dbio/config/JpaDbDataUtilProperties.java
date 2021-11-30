@@ -1,4 +1,4 @@
-package com.example.llz.commons.config;
+package com.example.llz.commons.dbio.config;
 
 import lombok.Data;
 

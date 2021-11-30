@@ -1,4 +1,4 @@
-package com.example.llz.commons.support;
+package com.example.llz.commons.dbio.support;
 
 public interface DbDataProcessor<T> {
     

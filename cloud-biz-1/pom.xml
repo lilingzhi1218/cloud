@@ -78,6 +78,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+		<!-- 引用自己的数据库工具模块-->
 		<dependency>
 			<groupId>com.example.llz</groupId>
 			<artifactId>common-support-db-export-import-starter</artifactId>
@@ -87,6 +88,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<!-- 引用自己的消息队列模块-->
+		<dependency>
+			<groupId>com.example.llz</groupId>
+			<artifactId>common-support-massaging</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

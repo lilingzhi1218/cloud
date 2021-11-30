@@ -1,8 +1,8 @@
-package com.example.llz.commons.config;
+package com.example.llz.commons.dbio.config;
 
-import com.example.llz.commons.support.DbDataProcessor;
-import com.example.llz.commons.utils.DbDataManagerUtils;
-import com.example.llz.commons.utils.JpaDbDataProcessor;
+import com.example.llz.commons.dbio.utils.DbDataManagerUtils;
+import com.example.llz.commons.dbio.utils.JpaDbDataProcessor;
+import com.example.llz.commons.dbio.support.DbDataProcessor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

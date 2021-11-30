@@ -16,6 +16,11 @@ spring:
         max-wait: 3000 #连接池最大的阻塞等待时间
         max-idle: 20 #连接池最大空闲连接
         min-idle: 0 #连接池最小空闲连接
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: Admin123
   #数据源配置
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
