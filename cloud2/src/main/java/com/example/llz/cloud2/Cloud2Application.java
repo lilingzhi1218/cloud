@@ -1,4 +1,4 @@
-package com.example.llz.cloud1;
+package com.example.llz.cloud2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class CloudBiz1Application {
+public class Cloud2Application {
 
-    public static void main(String[] args) {
-        SpringApplication.run(CloudBiz1Application.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(Cloud2Application.class, args);
+	}
 
 }
