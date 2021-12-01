@@ -8,4 +8,18 @@
     <insert id="addPerson" parameterType="com.example.llz.cloudbiz1.entity.Person">
         insert into person values (#{id}, #{name}, #{age}, #{sex})
     </insert>
+
+    <insert id="saveOrUpdate" parameterType="com.example.llz.cloudbiz1.entity.Person">
+        <selectKey keyProperty="id" resultType="com.example.llz.cloudbiz1.entity.Person" order="BEFORE">
+            select count(id) as id from person where id = #{id}
+        </selectKey>
+        <if test="id == 1">
+            update person
+            set id = #{id},name = #{name},age = #{age}, sex = #{sex}
+            where id = #{id}
+        </if>
+        <if test="id == 0">
+            insert into person values(#{name},#{countryname},#{countrycode})
+        </if>
+    </insert>
 </mapper>
