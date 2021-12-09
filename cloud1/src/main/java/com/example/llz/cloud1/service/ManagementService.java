@@ -1,13 +1,22 @@
 package com.example.llz.cloud1.service;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.util.IoUtils;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSON;
 import com.example.llz.cloud1.dao.PersonDao;
 import com.example.llz.cloud1.entity.Person;
 import com.example.llz.cloud1.iService.IManagementService;
+import com.example.llz.cloud1.utils.listener.PersonListener;
+import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +35,8 @@ public class ManagementService implements IManagementService {
     
     final static String SUFFIX_ZIP = ".zip";
     final static String SUFFIX_JSON = ".json";
+    final static String SUFFIX_XLSX= ".xlsx";
+    final static String SUFFIX_CSV= ".csv";
     
     @Override
     public void exportPerson(OutputStream outputStream) throws IOException {
@@ -48,7 +59,7 @@ public class ManagementService implements IManagementService {
     }
     
     private void writeToPackage(String name, byte[] bytes, ZipOutputStream zipOutputStream) throws IOException {
-        zipOutputStream.putNextEntry(new ZipEntry(name + SUFFIX_ZIP));
+        zipOutputStream.putNextEntry(new ZipEntry(name + SUFFIX_JSON));
         zipOutputStream.write(bytes);
         zipOutputStream.closeEntry();
         zipOutputStream.flush();
@@ -81,6 +92,44 @@ public class ManagementService implements IManagementService {
             }
             zip.closeEntry();
         }
+    }
+    /*
+    
+  我叫李凌志，2020年本科毕业于桂林理工大学，目前就职于广东南方数码科技，主要负责公司的政务服务平台的开发维护，
+  期间也有三个月的时间去项目现场做定制开发，项目主要基于springCloud做的微服务框架，这次的话也是想找找其他机会。
+    * */
+    
+    @Override
+    public void exportPersonForExcel(OutputStream outputStream) throws IOException {
+//        zipOutputStream.putNextEntry(new ZipEntry("人员" + SUFFIX_ZIP));
+//        ZipOutputStream personOutputStream = new ZipOutputStream(zipOutputStream);
+        try (ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
+             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            zipOutputStream.putNextEntry(new ZipEntry("人员.xlsx"));
+            List<Person> allPerson = this.personDao.findAllPerson();
+            //流会自动关闭
+//        EasyExcel.write(byteArrayOutputStream, Person.class).sheet("person").doWrite(allPerson);
+            ExcelWriter excelWriter = EasyExcel.write(byteArrayOutputStream).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet("person").head(Person.class).build();
+            excelWriter.write(allPerson, writeSheet);
+            excelWriter.finish();
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+//            int len;
+//            byte[] buf = new byte[1024];
+//            while ((len = inputStream.read(buf)) > 0) {
+//                zipOutputStream.write(buf, 0, len);
+//            }
+            //等于以上代码
+            IoUtils.copy(inputStream, zipOutputStream);
+        }
+    }
+    
+    @Override
+    public void importPersonForExcel(InputStream inputStream) throws IOException {
+        ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+        zipInputStream.getNextEntry();
+        EasyExcel.read(zipInputStream, Person.class, new PersonListener()).sheet().headRowNumber(1).doRead();
+
     }
     
 }

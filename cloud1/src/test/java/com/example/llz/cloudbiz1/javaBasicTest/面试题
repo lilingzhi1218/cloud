@@ -532,7 +532,6 @@
         CrudRepository：继承Repository，实现了一组CRUD相关的方法，这个用的比较多，一般如果上层业务只需要基本的增删改查，继承这个接口就可以了。
         JpaRepository：继承PagingAndSortingRepository，实现一组JPA规范相关的方法。这个也用的比较多，它和CrudRepository区别在于支持分页和排序。
 
-  
 线程
 redis
 数据库优化

@@ -12,4 +12,8 @@ public interface IManagementService {
     void exportPerson(OutputStream outputStream) throws IOException;
 
     Object importPerson(InputStream inputStream) throws IOException;
+
+    void exportPersonForExcel(OutputStream outputStream) throws IOException;
+
+    void importPersonForExcel(InputStream inputStream) throws IOException;
 }

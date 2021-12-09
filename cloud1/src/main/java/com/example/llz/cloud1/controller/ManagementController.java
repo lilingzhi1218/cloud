@@ -1,6 +1,7 @@
 package com.example.llz.cloud1.controller;
 
 import com.example.llz.cloud1.iService.IManagementService;
+import com.example.llz.cloud1.service.ManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,5 +39,28 @@ public class ManagementController {
             throw new Exception("文件类型不正确，请上传zip文件");
         }
         return iManagementService.importPerson(file.getInputStream());
+    }
+    
+    @RequestMapping("exportPersonForExcel")
+    @ResponseBody
+    public void exportPersonForExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+//        response.setContentType("application/zip");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + "exportPersonForExcel.zip");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        this.iManagementService.exportPersonForExcel(response.getOutputStream());
+    }
+    
+    @RequestMapping("importPersonForExcel")
+    @ResponseBody
+    public void importPersonForExcel(MultipartFile file) throws Exception {
+        if (file == null || file.isEmpty()){
+            throw new Exception("上传文件为空");
+        }
+        if (file.getOriginalFilename().endsWith(".csv") || file.getOriginalFilename().endsWith(".xlsx")) {
+            throw new Exception("请上传csv或xlsx文件");
+        }
+        this.iManagementService.importPersonForExcel(file.getInputStream());
+        
     }
 }
