@@ -126,10 +126,7 @@ public class ManagementService implements IManagementService {
     
     @Override
     public void importPersonForExcel(InputStream inputStream) throws IOException {
-        ZipInputStream zipInputStream = new ZipInputStream(inputStream);
-        zipInputStream.getNextEntry();
-        EasyExcel.read(zipInputStream, Person.class, new PersonListener()).sheet().headRowNumber(1).doRead();
-
+        EasyExcel.read(inputStream, Person.class, new PersonListener()).sheet().doRead();
     }
     
 }

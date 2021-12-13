@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+import java.util.zip.ZipInputStream;
 
 @Controller
 @RequestMapping("management")
@@ -57,7 +59,7 @@ public class ManagementController {
         if (file == null || file.isEmpty()){
             throw new Exception("上传文件为空");
         }
-        if (file.getOriginalFilename().endsWith(".csv") || file.getOriginalFilename().endsWith(".xlsx")) {
+        if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".csv") && !file.getOriginalFilename().endsWith(".xlsx")) {
             throw new Exception("请上传csv或xlsx文件");
         }
         this.iManagementService.importPersonForExcel(file.getInputStream());
