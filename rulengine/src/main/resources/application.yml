@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: rulengine
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloud
+    username: admin
+    password: Admin123
+eureka:
+  client:
+    enabled: false
+server:
+  port: 8884
+  servlet:
+    context-path: /rulengine
