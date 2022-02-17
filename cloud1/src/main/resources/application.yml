@@ -47,9 +47,9 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8880/eureka
-    enabled: true
+    enabled: false
     
 db-data-util:
   jpa:
     import-classes:
-      - com.example.llz.cloudbiz1.entity.Person
+      - com.example.llz.cloud1.entity.Person
