@@ -21,7 +21,7 @@ public class WebLogAspect {
     /**
      * 定义切入点，切入点为com.example.aop下的所有函数
      */
-    @Pointcut("execution(public * com.example.llz.cloud1.controller.MongoDbController.*.*(..))")
+    @Pointcut("execution(public * com.example.llz.cloud1.mongo.MongoDbController.*.*(..))")
     public void webLog(){}
 
     /**
@@ -74,7 +74,7 @@ public class WebLogAspect {
      * 这里是使用自定义注解作为切入点的环绕方法
      * 环绕通知第一个参数必须是org.aspectj.lang.ProceedingJoinPoint类型 
      */
-    @Around(value = "@annotation(com.example.llz.cloud1.Annotation.LogAspect)")
+    @Around(value = "@annotation(com.example.llz.cloud1.Aspect.LogAspect)")
     public Object doAroundByAnnotation(ProceedingJoinPoint proceedingJoinPoint){
         
         logger.info("自定义注解通知："+ Arrays.toString(proceedingJoinPoint.getArgs()));

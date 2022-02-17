@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.llz.cloudbiz1.dao.PersonDao">
-    <select id="findPersonByName" resultType="com.example.llz.cloudbiz1.entity.Person" parameterType="java.lang.String">
+<mapper namespace="com.example.llz.cloud1.mybatis.PersonDao">
+    <select id="findPersonByName" resultType="com.example.llz.cloud1.entity.Person" parameterType="java.lang.String">
         select * from person where name=#{name}
     </select>
     
-    <insert id="addPerson" parameterType="com.example.llz.cloudbiz1.entity.Person">
+    <insert id="addPerson" parameterType="com.example.llz.cloud1.entity.Person">
         insert into person values (#{id}, #{name}, #{age}, #{sex})
     </insert>
 
-    <insert id="saveOrUpdate" parameterType="com.example.llz.cloudbiz1.entity.Person">
-        <selectKey keyProperty="id" resultType="com.example.llz.cloudbiz1.entity.Person" order="BEFORE">
+    <insert id="saveOrUpdate" parameterType="com.example.llz.cloud1.entity.Person">
+        <selectKey keyProperty="id" resultType="com.example.llz.cloud1.entity.Person" order="BEFORE">
             select count(id) as id from person where id = #{id}
         </selectKey>
         <if test="id == 1">
