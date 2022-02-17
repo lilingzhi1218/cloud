@@ -1,6 +1,7 @@
 package com.example.llz.rulengine.config;
 
-import org.apache.commons.lang.time.DateUtils;
+import com.example.llz.rulengine.utils.DateUtil;
+import com.example.llz.rulengine.utils.assertion.ExceptionAssertEnum;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ public class RuleEngineUtils {
 
     public static String getCurDate(){
         Date date = new Date();
-        return DateUtils.dateToString(date);
+        return DateUtil.dateToString(date);
     }
     
     public static List<Object> foreach(List<Object> list, String opt) throws NoSuchMethodException {
@@ -52,7 +53,7 @@ public class RuleEngineUtils {
         return sum;
     }
 
-    public static String getDate(String sDate) throws Exception {
+    public static String getDate(String sDate){
         String[] sa = {
                 "yyyy-MM-dd HH:mm:ss",
                 "yyyyMMdd HH:mm:ss",
@@ -72,7 +73,8 @@ public class RuleEngineUtils {
                 return new SimpleDateFormat(sa[0]).format(d);
             }
         }
-        throw new Exception("日期格式有误");
+        ExceptionAssertEnum.ServiceError.throwIsTrue(true, "日期格式有误");
+        return null;
     }
     public static Date getDate(String sFormat, String sDate) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat(sFormat);

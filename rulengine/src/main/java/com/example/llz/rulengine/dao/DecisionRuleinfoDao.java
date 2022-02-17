@@ -1,7 +1,7 @@
 package com.example.llz.rulengine.dao;
 
 
-import com.southgis.ibase.rule.dicisionrule.entity.DecisionRuleinfo;
+import com.example.llz.rulengine.entity.DecisionRuleinfo;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,7 +1,7 @@
 package com.example.llz.rulengine.dto;
 
-import com.southgis.ibase.rule.dicisionrule.entity.DecisionInfo;
-import com.southgis.ibase.rule.dicisionrule.entity.DecisionRuleinfo;
+import com.example.llz.rulengine.entity.DecisionInfo;
+import com.example.llz.rulengine.entity.DecisionRuleinfo;
 import lombok.Data;
 
 import java.util.List;

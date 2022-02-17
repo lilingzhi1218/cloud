@@ -1,10 +1,11 @@
 package com.example.llz.rulengine.iService;
 
-import com.southgis.ibase.rule.dicisionrule.dto.DecisionRuleModel;
-import com.southgis.ibase.rule.dicisionrule.entity.DecisionRuleClass;
-import com.southgis.ibase.rule.dicisionrule.entity.DecisionRuleinfo;
-import com.southgis.ibase.utils.PageQueryData;
-import com.southgis.ibase.utils.TreeEntity;
+
+import com.example.llz.commons.utils.pageData.PageQueryData;
+import com.example.llz.commons.utils.treeEntity.TreeEntity;
+import com.example.llz.rulengine.dto.DecisionRuleModel;
+import com.example.llz.rulengine.entity.DecisionRuleClass;
+import com.example.llz.rulengine.entity.DecisionRuleinfo;
 
 import java.util.List;
 import java.util.Map;
