@@ -9,6 +9,7 @@ public class Test<E> extends ExtendTest<E> implements InterfaceTest1, InterfaceT
     public void function() {
     }
 
+    //master----------------
     //master---
     //----
 
