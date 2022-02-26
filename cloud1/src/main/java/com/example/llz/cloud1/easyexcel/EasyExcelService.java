@@ -1,4 +1,4 @@
-package com.example.llz.cloud1.easyexcel.listener;
+package com.example.llz.cloud1.easyexcel;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
@@ -7,6 +7,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.example.llz.cloud1.entity.Person;
 import com.example.llz.cloud1.mybatis.PersonDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+@Service
 public class EasyExcelService implements IEasyExcelService {
 
     @Autowired

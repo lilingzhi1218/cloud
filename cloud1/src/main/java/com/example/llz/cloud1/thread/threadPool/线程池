@@ -1,0 +1,22 @@
+1.ThreadPoolExecutor：这个是Java自己实现的线程池执行类，基本上创建线程池都是通过这个类
+2.TreadPoolTaskExecutor：这个是springboot基于TreadPoolTaskExecutor实现的一个线程执行类类
+3.在springboot中，如果没有配置线程池的话，springboot会自动配置一个TreadPoolTaskExecutor到bean中，直接调用即可用
+    3.1 调用方式1：在Application启动类上面加上@EnableAsync，然后再需要异步执行的方法上加上@Async
+    3.2 调用方式2：直接注入ThreadPoolTaskExecutor，多次测试发现ThreadPoolTaskExecutor执行比@Async要快
+4.springboot默认线程池配置
+    # 核心线程数
+    spring.task.execution.pool.core-size=8  
+    # 最大线程数
+    spring.task.execution.pool.max-size=16
+    # 空闲线程存活时间
+    spring.task.execution.pool.keep-alive=60s
+    # 是否允许核心线程超时
+    spring.task.execution.pool.allow-core-thread-timeout=true
+    # 线程队列数量
+    spring.task.execution.pool.queue-capacity=100
+    # 线程关闭等待
+    spring.task.execution.shutdown.await-termination=false
+    spring.task.execution.shutdown.await-termination-period=
+    # 线程名称前缀
+    spring.task.execution.thread-name-prefix=task-
+    

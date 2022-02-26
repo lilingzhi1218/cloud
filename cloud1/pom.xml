@@ -81,7 +81,7 @@
 		<!-- 引用自己的数据库工具模块-->
 		<dependency>
 			<groupId>com.example.llz</groupId>
-			<artifactId>common-support-db-export-import-starter</artifactId>
+			<artifactId>common-support-db-export-import</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- jpa -->

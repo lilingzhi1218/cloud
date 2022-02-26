@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example.llz</groupId>
-	<artifactId>common-support-db-export-import-starter</artifactId>
+	<artifactId>common-support-db-export-import</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>common-support-db-export-import</name>
 	<description>Demo project for Spring Boot</description>
