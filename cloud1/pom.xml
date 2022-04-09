@@ -65,8 +65,8 @@
 		<!-- oracle插件 非开源-->
 		<dependency>
 			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc7</artifactId>
-			<version>12.1.0.2</version>
+			<artifactId>ojdbc8</artifactId>
+			<version>12.2.0.1</version>
 		</dependency>
 		<!-- mongodb -->
 		<dependency>
