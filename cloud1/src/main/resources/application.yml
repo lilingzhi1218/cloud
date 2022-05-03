@@ -23,11 +23,18 @@ spring:
     password: Admin123
   #数据源配置
   datasource:
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@//localhost:1521/orcl
-    username: C##CLOUD
-    password: Admin123
-    
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloud
+    username: root
+    password: Admin@123
+    type: com.alibaba.druid.pool.DruidDataSource
+
+
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+
   #mongoDb
   data:
     mongodb:
