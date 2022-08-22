@@ -8,4 +8,8 @@ public  abstract class Abstract<E> {
     public void put(E elm){
         System.out.println(elm);
     }
+    
+    protected int func(){
+        return size();
+    }
 }

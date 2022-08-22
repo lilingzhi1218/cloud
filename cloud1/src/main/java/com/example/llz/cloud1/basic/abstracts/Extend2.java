@@ -1,6 +1,6 @@
 package com.example.llz.cloud1.basic.abstracts;
 
-public class Extend<E> extends Abstract<E> {
+public class Extend2<E> extends Abstract<E> {
     /**
      * @param index index of the element to return
      * @return
@@ -15,7 +15,7 @@ public class Extend<E> extends Abstract<E> {
      */
     @Override
     public int size() {
-        System.out.println("Extend");
+        System.out.println("Extend2");
         return 0;
     }
 

@@ -44,7 +44,8 @@
   对于不同的世代可以使用不同的垃圾回收算法。比如对由于年轻代存放的对象多是朝生夕死,因此可以采用标记-复制,而对于老年代则可以采用标记-整理/清除.
 
 9.Minor GC
-  发生在新生代的GC为Minor GC.在Minor GC时会将新生代中还存活着的对象复制进一个Survivor中,然后对Eden和另一个Survivor进行清理.所以,平常可用的新生代大小为Eden的大小+一个Survivor的大小.
+  发生在新生代的GC为Minor GC.在Minor GC时会将新生代中还存活着的对象复制进一个Survivor中,然后对Eden和另一个Survivor进行清理.
+  所以,平常可用的新生代大小为Eden的大小+一个Survivor的大小.
   
 10.Major GC
   在老年代中的GC则为Major GC.
