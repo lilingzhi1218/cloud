@@ -308,45 +308,4 @@ public class StreamTest {
 
 	}
 
-	/**
-	 * groupingBy 拼接流中的元素
-	 */
-	private void groupingBy(){
-		List<String> stringList = Arrays.asList("Java 12", "Lambdas", "In", "Action");
-
-		Map<Integer, List<String>> collect = stringList.stream().collect(groupingBy(String::length));
-
-		//还可以通过嵌套使用groupingBy进行多级分类
-		Map<Integer, Map<Integer, List<String>>> collect1 = stringList.stream()
-				.collect(groupingBy(
-						String::length,
-						groupingBy(String::hashCode)
-				));
-		//结果为：
-		//{2={2373=[In]}, 6={1955883606=[Action]}, 7={1611513196=[Lambdas], -155279169=[Java 12]}}
-
-		Map<Integer, Map<String, List<String>>> collect2 = stringList.stream()
-				.collect(groupingBy(
-						String::length,
-						groupingBy(item -> {
-							if (item.length() <= 2) {
-								return "level1";
-							} else if (item.length() <= 6) {
-								return "level2";
-							} else {
-								return "level3";
-							}
-						})
-				));
-	}
-	//结果为：{2={level1=[In]}, 6={level2=[Action]}, 7={level3=[Java 12, Lambdas]}}
-
-	/**
-	 * partitioningBy 分区
-	 */
-	private void partitioningBy(){
-		List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5);
-		Map<Boolean, List<Integer>> result = integerList.stream().collect(partitioningBy(i -> i < 3));
-
-	}
 }
