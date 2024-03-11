@@ -1,4 +1,4 @@
-package com.example.llz.cloud1.basic;
+package com.example.llz.cloud1.Collection;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

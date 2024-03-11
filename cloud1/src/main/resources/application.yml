@@ -25,15 +25,19 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/cloud
-    username: root
-    password: Admin@123
+    username: admin
+    password: Admin123
     type: com.alibaba.druid.pool.DruidDataSource
 
 
   jpa:
     database: mysql
+    show-sql: true
     hibernate:
       ddl-auto: update
+    properties: 
+      hibernate:
+        auto: update
 
   #mongoDb
   data:
@@ -54,7 +58,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8880/eureka
-    enabled: false
+    enabled: true
     
 db-data-util:
   jpa:

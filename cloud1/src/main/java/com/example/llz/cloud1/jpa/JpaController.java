@@ -22,4 +22,10 @@ public class JpaController {
     public Object findAllCity(){
         return iJpaService.findAllCity();
     }
+    @RequestMapping("updateCity")
+    @ResponseBody
+    public void updateCity(String name, String id){
+        iJpaService.update(name, id);
+    }
+    
 }

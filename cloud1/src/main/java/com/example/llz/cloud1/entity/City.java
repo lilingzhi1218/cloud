@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -30,5 +31,8 @@ public class City  implements Serializable {
 
    	@Column(name = "PROVINCE" )
 	private String province;
+	
+   	@Transient
+	private String area;
 
 }

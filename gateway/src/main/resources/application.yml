@@ -9,7 +9,24 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      routes: 
+        - id: cloud1
+#          uri: lb://cloud1
+          uri: http://localhost:8881 # 路由的目标地址 http就是固定地址
+          predicates:
+            - Path=*
 
+sso:
+  # 打开模式三（使用Http请求校验ticket）
+  is-http: true
+  # SSO-Server端 ticket校验地址 
+  check-ticket-url: http://sa-sso-server.com:9000/sso/checkTicket
+  # SSO-Server端-单点登录授权地址 
+  auth-url: http://sso.stp.com:9000/sso/auth
+  # 单点注销地址 
+  slo-url: http://sa-sso-server.com:9000/sso/signout
+  # API 接口调用秘钥
+  secret-key: kQwIOrYvnXmSDkwEiFngrKidMcdrgKor
 
 eureka:
   client:
