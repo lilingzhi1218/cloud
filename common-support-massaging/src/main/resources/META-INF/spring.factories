@@ -1,2 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
-  com.example.llz.commons.rabbitmq.config.RabbitConfig
+#
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
+#  com.example.llz.commons.rabbitmq.config.RabbitConfig

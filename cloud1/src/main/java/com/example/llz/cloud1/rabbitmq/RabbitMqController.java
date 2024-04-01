@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("rabbit")
 public class RabbitMqController {
     
-    @Autowired
+    @Autowired(required = false)
     MqUtils mqUtils;
 
     @RequestMapping("queue")
     @ResponseBody
     public void findAllCity(){
+        if (mqUtils == null) return;
         mqUtils.sendToQueue(RabbitConfig.QUEUE_NAME, "queue");
     }
 }

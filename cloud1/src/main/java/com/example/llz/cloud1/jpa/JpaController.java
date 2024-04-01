@@ -14,7 +14,7 @@ public class JpaController {
     @Autowired
     IJpaService iJpaService;
     
-    @Autowired
+    @Autowired(required = false)
     MqUtils mqUtils;
     
     @RequestMapping("findAllCity")

@@ -4,3 +4,11 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true # 开启重试机制
+          max-attempts: 5 # 最大重试次数
+          initial-interval: 1000 # 首次重试间隔时间（毫秒）
+          multiplier: 1.5 # 下次重试间隔乘数
+          max-interval: 10000 # 最大重试间隔时间（毫秒）
