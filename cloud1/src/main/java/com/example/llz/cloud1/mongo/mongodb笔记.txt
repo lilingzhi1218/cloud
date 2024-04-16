@@ -1,3 +1,5 @@
+在启动类上添加排除MongoAutoConfiguration.class
+
 一、所需依赖
     <dependency>
         <groupId>org.springframework.boot</groupId>

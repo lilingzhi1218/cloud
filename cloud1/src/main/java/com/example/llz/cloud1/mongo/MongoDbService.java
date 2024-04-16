@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MongoDbService implements IMongoDbService {
-    @Autowired
+    //禁用mongo自动配置
+//    @Autowired
     MongoTemplate mongoTemplate;
     
     @Override
