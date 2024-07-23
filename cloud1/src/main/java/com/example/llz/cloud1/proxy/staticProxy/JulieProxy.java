@@ -1,4 +1,4 @@
-package com.example.llz.cloud1.proxy;
+package com.example.llz.cloud1.proxy.staticProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

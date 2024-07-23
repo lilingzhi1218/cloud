@@ -1,4 +1,4 @@
-package com.example.llz.cloud1.proxy;
+package com.example.llz.cloud1.proxy.staticProxy;
 
 /**
  * 明星朱莉
