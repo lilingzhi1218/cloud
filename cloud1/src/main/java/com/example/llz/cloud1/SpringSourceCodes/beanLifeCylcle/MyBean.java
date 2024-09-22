@@ -8,6 +8,9 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +26,7 @@ import java.io.Serializable;
 @Table(name = "my_bean")
 @Data
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class MyBean implements Serializable, BeanNameAware, BeanClassLoaderAware, BeanFactoryAware, BeanPostProcessor {
 
 	@Id

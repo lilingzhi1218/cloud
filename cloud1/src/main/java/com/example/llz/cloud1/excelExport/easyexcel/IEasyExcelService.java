@@ -1,4 +1,4 @@
-package com.example.llz.cloud1.easyexcel;
+package com.example.llz.cloud1.excelExport.easyexcel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,4 +9,6 @@ public interface IEasyExcelService {
     void exportPersonForExcel(OutputStream outputStream) throws IOException;
 
     void importPersonForExcel(InputStream inputStream) throws IOException;
+
+    void exportBigData();
 }
