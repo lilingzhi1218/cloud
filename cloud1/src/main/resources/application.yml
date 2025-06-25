@@ -30,13 +30,13 @@ spring:
     password: Admin@123
 
     first:
-#      type: com.alibaba.druid.pool.DruidDataSource
+      type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/first
       username: root
       password: Admin@123
     second:
-#      type: com.alibaba.druid.pool.DruidDataSource
+      type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/second
       username: root
@@ -48,9 +48,11 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
     properties: 
       hibernate:
         auto: update
+        dialect: org.hibernate.dialect.MySQL57Dialect
 
   #mongoDb
   data:
