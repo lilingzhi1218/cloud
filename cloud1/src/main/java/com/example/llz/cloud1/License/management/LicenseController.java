@@ -1,5 +1,6 @@
 package com.example.llz.cloud1.License.management;
 
+import com.example.llz.cloud1.Aspect.LogAspect;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import java.security.KeyPair;
 
 @RequestMapping("license")
 @RestController
+@LogAspect
 public class LicenseController {
     @RequestMapping("generatorLicense")
     public void generatorLicense(HttpServletResponse response, @RequestBody LicenseData licenseData) throws Exception {
@@ -33,7 +35,7 @@ public class LicenseController {
 //        );
 
         // 添加硬件绑定
-        licenseData.addHardwareBinding("00:1A:2B:3C:4D:5E");
+//        licenseData.addHardwareBinding("00:1A:2B:3C:4D:5E");
 
         // 3. 生成许可证文件
         LicenseGenerator generator = new LicenseGenerator(keyPair.getPrivate(), obfuscationKey);
