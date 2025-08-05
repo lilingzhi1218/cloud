@@ -1,10 +1,25 @@
 package com.example.llz.cloud1.License.management;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.zip.CRC32;
 
 // ====================== 加密工具类 ======================
 public class CryptoUtils {
+    // 从文件加载公钥
+    public static PublicKey loadPublicKey(String publicKeyPath) throws Exception {
+        byte[] keyBytes = Files.readAllBytes(Paths.get(publicKeyPath));
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+        return KeyFactory.getInstance("RSA").generatePublic(spec);
+    }
+    public static PrivateKey loadPrivateKey(String publicKeyPath) throws Exception {
+        byte[] keyBytes = Files.readAllBytes(Paths.get(publicKeyPath));
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+        return KeyFactory.getInstance("RSA").generatePrivate(spec);
+    }
     // 生成RSA密钥对（2048位）
     public static KeyPair generateKeyPair() throws Exception {
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Data;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class LicenseData {
     public Instant expireAt;
     public List<String> features;
     public List<String> hardwareBindings; // 硬件绑定信息
+    public List<String> organIds;
 
     // 空构造器用于JSON解析
     public LicenseData() {}

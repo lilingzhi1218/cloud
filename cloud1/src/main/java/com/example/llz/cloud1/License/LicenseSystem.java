@@ -25,7 +25,7 @@ public class LicenseSystem {
         //获取秘钥对
         PrivateKey privateKey = loadPrivateKey("C:\\Users\\llz\\Desktop\\不动产\\74638 增加授权码控制功能点\\keys\\private_key.der");
         PublicKey publicKey = loadPublicKey("C:\\Users\\llz\\Desktop\\不动产\\74638 增加授权码控制功能点\\keys\\public_key.der");
-        byte[] obfuscationKey = "SecureKey123!".getBytes(StandardCharsets.UTF_8);
+        byte[] obfuscationKey = "SouthgisSecureKey2025!".getBytes(StandardCharsets.UTF_8);
 
         // 2. 创建许可证数据
         LicenseData licenseData = new LicenseData(

@@ -11,6 +11,8 @@ import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.util.Base64;
 
 @RequestMapping("license")
 @RestController
@@ -21,27 +23,27 @@ public class LicenseController {
         response.setContentType("application/octet-stream");
 
         // 1. 生成密钥对（在实际应用中，私钥在授权服务器，公钥在客户端）
-        KeyPair keyPair = CryptoUtils.generateKeyPair();
-        byte[] obfuscationKey = "SecureKey123!".getBytes(StandardCharsets.UTF_8);
+        PrivateKey privateKey = CryptoUtils.loadPrivateKey("C:\\Users\\llz\\Desktop\\不动产\\74638 增加授权码控制功能点\\keys\\private_key.der");
+        byte[] obfuscationKey = "SouthgisSecureKey2025!".getBytes(StandardCharsets.UTF_8);
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + "company_a_license.lic");
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-        // 2. 创建许可证数据
-//        LicenseData licenseData = new LicenseData(
-//                "LIC-2023-COMPANY-A",
-//                "ABC科技有限公司",
-//                Instant.now(),
-//                Instant.now().plus(365, ChronoUnit.DAYS), // 1年有效期
-//                Arrays.asList("report_export", "data_analysis", "real_time_monitor")
-//        );
-
-        // 添加硬件绑定
-//        licenseData.addHardwareBinding("00:1A:2B:3C:4D:5E");
 
         // 3. 生成许可证文件
-        LicenseGenerator generator = new LicenseGenerator(keyPair.getPrivate(), obfuscationKey);
+        // 显示Base64编码的密钥
+        String base64Key = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+        System.out.println(formatBase64(base64Key, 64));
+        LicenseGenerator generator = new LicenseGenerator(privateKey, obfuscationKey);
         byte[] bytes = generator.generateLicense(licenseData);
         ByteArrayInputStream bai = new ByteArrayInputStream(bytes);
         OutputStream outputStream = response.getOutputStream();
         IOUtils.copy(bai, outputStream);
+    }
+    private static String formatBase64(String base64, int lineLength) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < base64.length(); i += lineLength) {
+            int end = Math.min(i + lineLength, base64.length());
+            sb.append(base64, i, end).append("\n");
+        }
+        return sb.toString().trim();
     }
 }
